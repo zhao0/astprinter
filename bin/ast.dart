@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'dart:mirrors';
-import 'package:analyzer/analyzer.dart';
-import 'package:analyzer/src/generated/ast.dart';
+import 'package:analyzer/dart/analysis/utilities.dart';
+import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/src/generated/parser.dart';
+// import 'package:analyzer/src/generated/ast.dart';
 
 bool isSubType(dynamic obj, List<ClassMirror> sec) {
   for (ClassMirror type in sec) {
@@ -26,16 +28,19 @@ List<String> failures = [], stuff = [];
 
 main(List<String> args) {
   if (args.length == 1) {
-    CompilationUnit unit = parseDartFile(args[0]);
+    String content = File(args[0]).readAsStringSync();
+    CompilationUnit unit = parseString(content:content).unit;
     List<ClassMirror> mirrors = [reflectClass(Object)];
     print(expandedAst(unit, mirrors));
   } else if (args.length >= 2) {
-    List<String> typeArgs = args.getRange(1, args.length).toList();
+    List<String> typeArgs = args.getRange(
+      1, args.length).toList();
     if (typeArgs.last == '-n') {
       typeArgs.removeLast();
       noSubTypes = true;
     }
-    CompilationUnit unit = parseDartFile(args[0]);
+    String content = File(args[0]).readAsStringSync();
+    CompilationUnit unit = parseString(content:content).unit;
     List<ClassMirror> mirrors = createMirrors(typeArgs);
     if (mirrors.isNotEmpty) {
       print(expandedAst(unit, mirrors));

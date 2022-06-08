@@ -1,10 +1,12 @@
-name: astprinter
+name: ast
 description: >
   A command line tool that prints the AST of a dart file.
 version: 0.1.0
-author: George Kormaris <gekorm@gmail.com>
 homepage: https://github.com/GeKorm/astprinter/
 dependencies:
-  analyzer: ">=0.26.0 <0.27.0"
+  analyzer: 4.1.0
 executables:
   ast:
+
+environment:
+  sdk: '>=2.10.0 <3.0.0'
